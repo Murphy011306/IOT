@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP8266 WebSocket Client</title>
+</head>
+<body>
+    <h1>ESP8266 WebSocket Client</h1>
+    <div>
+        <button onclick="sendMessage('on')">Turn LED ON</button>
+        <button onclick="sendMessage('off')">Turn LED OFF</button>
+    </div>
+    <p id="status">Status: Disconnected</p>
+    <p id="log"></p>
+
+    <script>
+        // const ipAddress = "ws://192.168.1.10:81"; // Thay <ESP8266_IP> bằng địa chỉ IP của ESP8266
+            const ipAddress = "ws://192.168.137.110:81";
+        let websocket;
+
+        function initWebSocket() {
+            websocket = new WebSocket(ipAddress);
+
+            websocket.onopen = () => {
+                document.getElementById("status").innerText = "Status: Connected";
+                console.log("Connected to WebSocket Server");
+            };
+
+            websocket.onclose = () => {
+                document.getElementById("status").innerText = "Status: Disconnected";
+                console.log("Disconnected from WebSocket Server");
+                setTimeout(initWebSocket, 2000); // Cố gắng kết nối lại sau 2 giây
+            };
+
+            websocket.onmessage = (event) => {
+                console.log("Message from server: ", event.data);
+                document.getElementById("log").innerHTML = "<p>" + event.data + "</p>";
+            };
+        }
+
+        function sendMessage(message) {
+            if (websocket.readyState === WebSocket.OPEN) {
+                websocket.send(message);
+                console.log("Sent: " + message);
+            } else {
+                console.log("WebSocket is not open. Unable to send message.");
+            }
+        }
+
+        window.onload = initWebSocket;
+    </script>
+</body>
+</html>
