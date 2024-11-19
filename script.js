@@ -1,5 +1,5 @@
 // const ipAddress = "ws://192.168.137.220:81"; // địa chỉ IP của máy Lộc
-const ipAddress = "ws://192.168.1.8:8080"; // Thay <ESP8266_IP> bằng địa chỉ IP của ESP8266
+const ipAddress = "ws://192.168.7.14:8080"; // Thay <ESP8266_IP> bằng địa chỉ IP của ESP8266
 let websocket;
 var dataOutput = "";
 
